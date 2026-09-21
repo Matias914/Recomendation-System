@@ -13,43 +13,34 @@ El entorno requiere **Python 3.8+** y las siguientes librerías:
 * **Scipy** (pruebas de hipótesis estadísticas)
 * **Scikit-Surprise** (algoritmos de recomendación)
 
-> *Nota: El cuaderno incluye un script automático al inicio que verifica e instala `scikit-surprise` mediante `pip` si no se encuentra en el entorno.*
-
 ---
 
 ## 📁 Estructura y Archivos de Datos
 
-Para ejecutar el cuaderno, se requieren los siguientes datasets en formato CSV (del dataset público *Book-Crossing*):
+Para ejecutar el cuaderno, se requieren los siguientes datasets en formato CSV (del dataset público *Book-Crossing* ubicados en el directorio `./datasets/`):
 
 * `BX-Book-Ratings.csv`: Registro de valoraciones de los usuarios a los libros.
 * `BX-Users.csv`: Información demográfica de los usuarios (Edad, Ubicación).
 
 ---
 
-## ⚙️ Flujo del Proyecto
+## ⚙️ Estructura y Flujo del Cuaderno (Refactorizado)
 
-1. **Preprocesamiento y Limpieza**: Normalización de nombres de columnas, filtrado de usuarios en un rango de edad válido ($10 \le \text{Edad} \le 90$) y selección de usuarios con al menos 8 interacciones pasadas.
-2. **Segmentación de Subgrupos (Atributos Protegidos)**:
-* **Edad**: Jóvenes ($\le 35$ años) vs. Adultos ($> 35$ años).
-* **Geografía**: USA/Canadá vs. Resto del Mundo.
-* **Gustos**: Usuarios *Mainstream* (consumidores del Top 20% de libros más populares) vs. Usuarios de *Nicho*.
+El código está organizado en bloques modulares, cada uno con su respectiva documentación en Markdown y salidas limpias:
 
-
-3. **Entrenamiento SVD**: Ajuste del modelo de factorización de matrices (SVD) con escala de calificación de $0$ a $10$ y una partición $80/20$ (train/test).
-4. **Evaluación de Métrica de Error y Calidad de Recomendación**:
-* **RMSE** (Root Mean Squared Error) global y por subgrupo.
-* **Precision@5 y Recall@5** (umbral de relevancia $\ge 7$).
-* **Cobertura del Catálogo** (%) recomendada para cada perfil.
-
-
-5. **Pruebas de Significancia Estadística**:
-* Test de **Mann-Whitney U** sobre los errores absolutos de predicción ($\vert{}y - \hat{y}\vert{}$) para validar si el sesgo detectado entre grupos es estadísticamente significativo ($p < 0.05$).
-
-
-6. **Experimentos de Sensibilidad**:
-* Re-evaluación del comportamiento y sesgos del modelo aplicando una partición ajustada de $50/50$ (train/test).
-
-
+1. **Importación y Carga de Datos**: Importación de librerías y lectura inicial de los archivos CSV.
+2. **Segmentación Demográfica**: Creación de variables categóricas (Edad: Jóvenes vs. Adultos; Geografía: USA/Canadá vs. Resto del Mundo).
+3. **Filtrado de Interacciones y Configuración del Modelo**: Depuración de usuarios con interacciones insuficientes (mínimo 8) y partición Train/Test (80/20).
+4. **Segmentación por Comportamiento**: Clasificación de perfiles de usuario (*Mainstream* vs. *Nicho*) computada exclusivamente sobre el trainset para evitar *data leakage*.
+5. **Entrenamiento del Modelo Predictivo**: Ajuste del algoritmo SVD y consolidación del dataset de errores.
+6. **Evaluación Predictiva (RMSE y MAE)**: Medición de desviaciones predictivas por grupo y ejecución del test U de Mann-Whitney para validación de significancia en el MAE.
+7. **Preparación para Métricas de Ranking**: Simulación de catálogo inyectando 100 ítems aleatorios negativos (no interactuados) por cada usuario.
+8. **Cálculo de Precision, Recall y Cobertura**: Evaluación de calidad del recomendador en los primeros 5 resultados (Top-5) considerando un umbral de relevancia $\ge 7$.
+9. **Test de Significancia para Ranking**: Aplicación del test de Mann-Whitney sobre las métricas P@5 y R@5 para detectar variaciones estadísticamente significativas.
+10. **Experimento de Impacto 50/50 (Entrenamiento)**: Reducción del conjunto de entrenamiento al 50% para forzar un escenario de escasez de datos.
+11. **Experimento de Impacto 50/50 (Evaluación de Deltas)**: Verificación de la ampliación de brechas de error y empeoramiento de la equidad entre subgrupos.
+12. **Análisis y Resumen de Resultados**: Conclusión final con la interpretación de las métricas predictivas y de ranking, confirmando los sesgos detectados.
+13. **Declaración de uso de herramientas de IA generativa**: Sección de transparencia con los prompts y herramientas empleadas como asistencia técnica durante el desarrollo.
 
 ---
 
@@ -65,5 +56,6 @@ Para ejecutar el cuaderno, se requieren los siguientes datasets en formato CSV (
 
 ## 🚀 Instrucciones de Ejecución
 
-1. Actualiza las rutas locales de los archivos CSV en la Celda 2 (`ruta_ratings` y `ruta_users`).
-2. Ejecuta las celdas en orden secuencial en un entorno de **Jupyter Notebook** o **Google Colab**.
+1. Verifica que los archivos `BX-Book-Ratings.csv` y `BX-Users.csv` se encuentren en la carpeta `./datasets/`.
+2. Instala las dependencias necesarias mediante `pip install pandas numpy scipy scikit-surprise`.
+3. Ejecuta las celdas en orden secuencial en un entorno de **Jupyter Notebook**, observando el análisis de resultados al final del documento.
