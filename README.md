@@ -6,12 +6,7 @@ Este proyecto implementa un sistema de recomendación basado en filtrado colabor
 
 ## 📋 Requisitos del Sistema y Dependencias
 
-El entorno requiere **Python 3.8+** y las siguientes librerías:
-
-* **Pandas** (manipulación de datos)
-* **NumPy** (operaciones numéricas)
-* **Scipy** (pruebas de hipótesis estadísticas)
-* **Scikit-Surprise** (algoritmos de recomendación)
+El entorno requiere **Python 3.8+**. Todas las dependencias necesarias (incluyendo Pandas, NumPy, Scipy y Scikit-Surprise) se encuentran detalladas en el archivo `requirements.txt` adjunto en el proyecto.
 
 ---
 
@@ -56,6 +51,36 @@ El código está organizado en bloques modulares, cada uno con su respectiva doc
 
 ## 🚀 Instrucciones de Ejecución
 
-1. Verifica que los archivos `BX-Book-Ratings.csv` y `BX-Users.csv` se encuentren en la carpeta `./datasets/`.
-2. Instala las dependencias necesarias mediante `pip install pandas numpy scipy scikit-surprise`.
-3. Ejecuta las celdas en orden secuencial en un entorno de **Jupyter Notebook**, observando el análisis de resultados al final del documento.
+1. Crea un entorno virtual en el directorio de tu proyecto para aislar las dependencias:
+```bash
+python -m venv venv
+
+```
+
+
+2. Activa el entorno virtual:
+* **Windows:**
+```bash
+venv\Scripts\activate
+
+```
+
+
+* **Linux/Mac:**
+```bash
+source venv/bin/activate
+
+```
+
+
+
+
+3. Instala las dependencias necesarias utilizando el archivo de requerimientos:
+```bash
+pip install -r requirements.txt
+
+```
+
+
+4. Verifica que los archivos `BX-Book-Ratings.csv` y `BX-Users.csv` se encuentren correctamente ubicados en la carpeta `./datasets/`.
+5. Inicia tu entorno de **Jupyter Notebook** (ej. ejecutando `jupyter notebook` en la consola) y ejecuta las celdas del cuaderno en orden secuencial, observando el análisis de resultados al final del documento.
